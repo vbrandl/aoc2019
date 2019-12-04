@@ -1,26 +1,26 @@
 use std::collections::HashMap;
 
 #[aoc_generator(day4)]
-fn range_parser(input: &str) -> (Vec<i32>, i32, i32) {
+fn range_parser(input: &str) -> (i32, i32) {
     let mut parts = input.split('-');
     let start = parts.next().unwrap().parse::<i32>().unwrap();
     let end = parts.next().unwrap().parse::<i32>().unwrap();
-    ((start..=end).collect(), start, end)
+    (start, end)
 }
 
 #[aoc(day4, part1)]
-fn password((input, start, end): &(Vec<i32>, i32, i32)) -> i32 {
+fn password((start, end): &(i32, i32)) -> i32 {
     let filter = |val| {
         in_range(*start, *end, val)
             && six_digits(val)
             && adjacend_digits(val)
             && never_decreasing(val)
     };
-    input.into_iter().filter(|val| filter(**val)).count() as i32
+    (*start..=*end).filter(|val| filter(*val)).count() as i32
 }
 
 #[aoc(day4, part2)]
-fn password_more_criteria((input, start, end): &(Vec<i32>, i32, i32)) -> i32 {
+fn password_more_criteria((start, end): &(i32, i32)) -> i32 {
     let filter = |val| {
         in_range(*start, *end, val)
             && six_digits(val)
@@ -28,7 +28,7 @@ fn password_more_criteria((input, start, end): &(Vec<i32>, i32, i32)) -> i32 {
             && never_decreasing(val)
             && group_of_exactly_2(val)
     };
-    input.into_iter().filter(|val| filter(**val)).count() as i32
+    (*start..=*end).filter(|val| filter(*val)).count() as i32
 }
 
 fn six_digits(val: i32) -> bool {
